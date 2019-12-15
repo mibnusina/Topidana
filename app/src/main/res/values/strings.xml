@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Topidana</string>
+    <string name="facebook_app_id">982241618821519</string>
+    <string name="fb_login_protocol_scheme">fb982241618821519</string>
+</resources>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.LoginActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="150dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="225dp"
+            android:layout_height="73dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/logo" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingTop="100dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Masuk dengan"
+            android:textColor="#000"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/sign_in_fb_button"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_google_button"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+        <Button
+            android:id="@+id/btn_donasi"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/primary_button"
+            android:textColor="#fff"
+            android:textAllCaps="false"
+            android:visibility="gone"
+            android:fontFamily="@font/nunito"
+            android:text="Saya Ingin Berdonasi" />
+
+    </LinearLayout>
+
+</LinearLayout>
