@@ -8,10 +8,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.topidana.R;
 
@@ -22,6 +24,8 @@ public class WelcomePageActivity extends AppCompatActivity  {
 
     private static final String TAG = "WelcomePageActivity";
     Button btn_ajukan_beasiswa,btn_donasi;
+
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,7 @@ public class WelcomePageActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.putExtra("STATUS_USER", "user");
                 startActivity(intent);
             }
         });
@@ -42,7 +47,9 @@ public class WelcomePageActivity extends AppCompatActivity  {
         btn_donasi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                printHashKey(getApplicationContext());
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.putExtra("STATUS_USER", "donatur");
+                startActivity(intent);
             }
         });
     }
@@ -61,5 +68,10 @@ public class WelcomePageActivity extends AppCompatActivity  {
         } catch (Exception e) {
             Log.e(TAG, "printHashKey()", e);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        return ;
     }
 }

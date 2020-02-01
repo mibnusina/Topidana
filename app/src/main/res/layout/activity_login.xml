@@ -39,8 +39,8 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"/>
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/sign_in_fb_button"
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_google_button"
             android:layout_width="250dp"
             android:layout_height="wrap_content" />
 
@@ -48,10 +48,10 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"/>
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_google_button"
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/sign_in_fb_button"
             android:layout_width="250dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="250dp" />
 
         <Space
             android:layout_width="match_parent"

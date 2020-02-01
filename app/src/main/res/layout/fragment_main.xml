@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context=".fargments.MainFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/layout_rounded"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selamat datang di topidana"
+            android:layout_gravity="center"
+            android:textColor="#000"
+            android:textSize="20dp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="80dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="apa yang mau kamu lakukan ?"
+            android:layout_gravity="center"
+            android:textColor="#000"
+            android:textSize="16dp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="100dp">
+
+            <Button
+                android:id="@+id/btn_ajukan_beasiswa"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/banana_button"
+                android:textAllCaps="false"
+                android:fontFamily="@font/nunito"
+                android:text="Ajukan Beasiswa" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+            <Button
+                android:id="@+id/btn_lihat_beasiswa"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/primary_button"
+                android:textColor="#fff"
+                android:textAllCaps="false"
+                android:fontFamily="@font/nunito"
+                android:text="Lihat Beasiswa" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+            <Button
+                android:id="@+id/btn_personalisasi_profile"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/primary_button"
+                android:textColor="#fff"
+                android:textAllCaps="false"
+                android:fontFamily="@font/nunito"
+                android:text="Personalisasi Profile" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>
