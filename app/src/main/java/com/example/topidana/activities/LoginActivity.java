@@ -1,6 +1,7 @@
 package com.example.topidana.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -9,6 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -16,8 +19,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.topidana.R;
+import com.example.topidana.adapters.SectionsPageAdapter;
 import com.example.topidana.app.AppController;
 import com.example.topidana.app.Server;
+import com.example.topidana.fargments.DaftarFragment;
+import com.example.topidana.fargments.LoginFragment;
+import com.example.topidana.services.SharedPrefManager;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -25,13 +32,17 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +56,8 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
 
     ProgressDialog pDialog;
+    public static SharedPrefManager sharedPrefManager;
+    private ViewPager mViewPager;
 
     private static final String TAG = "LoginActivity";
     SignInButton sign_in_google_button;
@@ -71,13 +84,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        sharedPrefManager = new SharedPrefManager(this);
+
         status_user = getIntent().getStringExtra(TAG_STATUS_USER);
 
         mcallbackManager = CallbackManager.Factory.create();
 
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
-        // GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+//         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -86,28 +101,47 @@ public class LoginActivity extends AppCompatActivity {
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        sign_in_fb_button = findViewById(R.id.sign_in_fb_button);
+//        sign_in_fb_button = findViewById(R.id.sign_in_fb_button);
 
         sign_in_google_button = findViewById(R.id.sign_in_google_button);
 
-        sign_in_fb_button.setReadPermissions("email");
-
-        sign_in_fb_button.registerCallback(mcallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "onSuccess: "+ loginResult);
+        if (sharedPrefManager.getSPSudahLogin()){
+            String status_login = sharedPrefManager.getSPStatus();
+            if (status_login.equals("user")){
+                startActivity(new Intent(LoginActivity.this, MainActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+            }else {
+                startActivity(new Intent(LoginActivity.this, ListBeasiswaActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                finish();
             }
+        }
 
-            @Override
-            public void onCancel() {
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        setupViewPager(mViewPager);
 
-            }
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
 
-            @Override
-            public void onError(FacebookException error) {
-                Log.e(TAG, "onError: ", error);
-            }
-        });
+//        sign_in_fb_button.setReadPermissions("email");
+
+//        sign_in_fb_button.registerCallback(mcallbackManager, new FacebookCallback<LoginResult>() {
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+//                Log.d(TAG, "onSuccess: "+ loginResult);
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//
+//            }
+//
+//            @Override
+//            public void onError(FacebookException error) {
+//
+//            }
+//        });
 
         sign_in_google_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +150,13 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
+        adapter.addFragment(new LoginFragment(), "Login");
+        adapter.addFragment(new DaftarFragment(), "Daftar");
+        viewPager.setAdapter(adapter);
     }
 
     @Override
@@ -138,17 +179,20 @@ public class LoginActivity extends AppCompatActivity {
             String personDisplayName = account.getDisplayName();
             Uri personPhoto = account.getPhotoUrl();
 
-            cekUser(personEmail, personDisplayName);
+            String pass = "";
+
+            cekUser(personEmail, personDisplayName, pass);
 
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+
             //updateUI(null);
         }
     }
 
-    private void cekUser(final String personEmail, final String personDisplayName) {
+    private void cekUser(final String personEmail, final String personDisplayName, final String personPassword) {
         String url = Server.URL+"login/ceklogin.php?email="+personEmail;
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
@@ -173,6 +217,7 @@ public class LoginActivity extends AppCompatActivity {
                             String profile = data.getString("profile_pic");
 
                             status_user = status;
+                            sharedPrefManager.saveSPString(SharedPrefManager.SP_STATUS, status);
                             profile_pic = profile;
 
                             if (status.equals("user")){
@@ -192,17 +237,20 @@ public class LoginActivity extends AppCompatActivity {
                                 i.putExtra("PROFILE_PIC", profile);
                                 startActivity(i);
                             }
+                            sharedPrefManager.saveSPBoolean(SharedPrefManager.SP_LOGIN, true);
 
                         }else {
                             // Signed in successfully, show authenticated UI.
                             if (status_user.equals("user")){
                                 Intent i = new Intent(LoginActivity.this, FormProfileActivity.class);
                                 i.putExtra("PERSON_EMAIL", personEmail);
+                                i.putExtra("PERSON_NAMA", personDisplayName);
+                                i.putExtra("PERSON_PASSWORD", personPassword);
                                 i.putExtra(TAG_STATUS_USER, status_user);
                                 startActivity(i);
+                                sharedPrefManager.saveSPString(SharedPrefManager.SP_STATUS, status_user);
                             }else {
-                                Log.e(TAG, "personDisplayName: " + personDisplayName );
-                                createDonatur(personEmail, personDisplayName, status_user);
+                                createDonatur(personEmail, personDisplayName, status_user, personPassword);
                             }
                         }
 
@@ -216,7 +264,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "GET DATA Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         "koneksi internet tidak stabil", Toast.LENGTH_LONG).show();
 
@@ -237,7 +284,7 @@ public class LoginActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(strReq, tag_json_obj);
     }
 
-    private void createDonatur(final String personEmail, final String personDisplayName, final String status_user) {
+    private void createDonatur(final String personEmail, final String personDisplayName, final String status_user, final String personPassword) {
         String url = Server.URL+"user/create.php";
 
         StringRequest strReq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -253,7 +300,8 @@ public class LoginActivity extends AppCompatActivity {
                         Intent i = new Intent(LoginActivity.this, ListBeasiswaActivity.class);
                         i.putExtra("ID", jObj.getString("id"));
                         startActivity(i);
-
+                        sharedPrefManager.saveSPBoolean(SharedPrefManager.SP_LOGIN, true);
+                        sharedPrefManager.saveSPString(SharedPrefManager.SP_STATUS, status_user);
                     } else {
                         Toast.makeText(getApplicationContext(),
                                 jObj.getString("message"), Toast.LENGTH_LONG).show();
@@ -261,14 +309,12 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     // JSON error
-                    Log.e("Daftar Berhasil!", "error");
                     e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Daftar Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -280,6 +326,7 @@ public class LoginActivity extends AppCompatActivity {
                 params.put("email", personEmail);
                 params.put("nama_lengkap", personDisplayName);
                 params.put("status", status_user);
+                params.put("password", personPassword);
                 return params;
             }
         };

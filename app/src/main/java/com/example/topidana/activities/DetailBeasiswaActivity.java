@@ -123,7 +123,6 @@ public class DetailBeasiswaActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             dialog.show();
                         }
-                        Log.e("AWAWAW", "onProgressChanged: "+progress);
                     }
                 });
             }

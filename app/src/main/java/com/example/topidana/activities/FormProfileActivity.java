@@ -37,9 +37,11 @@ public class FormProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "FormProfileActivity";
     public final static String TAG_EMAIL = "PERSON_EMAIL";
+    public final static String TAG_NAMA = "PERSON_NAMA";
+    public final static String TAG_PASSWORD = "PERSON_PASSWORD";
     private static final String TAG_STATUS_USER = "STATUS_USER";
 
-    String person_email, nama_lengkap, pendidikan, tempat_kuliah, tanggal_lahir, status_user;
+    String person_email, nama_lengkap, pendidikan, tempat_kuliah, tanggal_lahir, status_user, password_user;
 
     final Calendar myCalendar = Calendar.getInstance();
 
@@ -53,14 +55,18 @@ public class FormProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_profile);
 
+        nama_lengkap = getIntent().getStringExtra(TAG_NAMA);
         person_email = getIntent().getStringExtra(TAG_EMAIL);
         status_user = getIntent().getStringExtra(TAG_STATUS_USER);
+        password_user = getIntent().getStringExtra(TAG_PASSWORD);
 
         et_nama_lengkap = findViewById(R.id.et_nama_lengkap);
         et_pendidikan = findViewById(R.id.et_pendidikan);
         et_tempat_kuliah = findViewById(R.id.et_tempat_kuliah);
         et_tanggal_lahir = findViewById(R.id.et_tanggal_lahir);
         btn_selanjutnya = findViewById(R.id.btn_selanjutnya);
+
+        et_nama_lengkap.setText(nama_lengkap);
 
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -95,7 +101,7 @@ public class FormProfileActivity extends AppCompatActivity {
                 tanggal_lahir = et_tanggal_lahir.getText().toString();
 
                 if (!nama_lengkap.equals("") && !pendidikan.equals("") && !tempat_kuliah.equals("") && !tanggal_lahir.equals("")){
-                    insertUser(person_email, nama_lengkap, pendidikan, tempat_kuliah, tanggal_lahir, status_user);
+                    insertUser(person_email, nama_lengkap, pendidikan, tempat_kuliah, tanggal_lahir, status_user, password_user);
                 }else{
                     Toast.makeText(getApplicationContext(), "Data Harus Diisi Semua", Toast.LENGTH_SHORT).show();
                 }
@@ -104,7 +110,7 @@ public class FormProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void insertUser(final String person_email, final String nama_lengkap, final String pendidikan, final String tempat_kuliah, final String tanggal_lahir, final String status_user) {
+    private void insertUser(final String person_email, final String nama_lengkap, final String pendidikan, final String tempat_kuliah, final String tanggal_lahir, final String status_user, final String password_user) {
         String url = Server.URL+"user/create.php";
 
         StringRequest strReq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -131,14 +137,12 @@ public class FormProfileActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     // JSON error
-                    Log.e("Daftar Berhasil!", "error");
                     e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Daftar Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -150,6 +154,7 @@ public class FormProfileActivity extends AppCompatActivity {
                 params.put("email", person_email);
                 params.put("nama_lengkap", nama_lengkap);
                 params.put("status", status_user);
+                params.put("password", password_user);
                 return params;
             }
         };

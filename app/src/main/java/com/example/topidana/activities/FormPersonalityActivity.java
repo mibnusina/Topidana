@@ -162,7 +162,6 @@ public class FormPersonalityActivity extends AppCompatActivity {
 
                     // Check for error node in json
                     if (pesan.equals("berhasil")) {
-
                         Intent i = new Intent(FormPersonalityActivity.this, MainActivity.class);
                         i.putExtra(TAG_ID, id);
                         startActivity(i);
@@ -174,14 +173,12 @@ public class FormPersonalityActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     // JSON error
-                    Log.e("Daftar Berhasil!", "error");
                     e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Daftar Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
             }

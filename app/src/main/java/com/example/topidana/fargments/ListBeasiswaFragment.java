@@ -91,7 +91,6 @@ public class ListBeasiswaFragment extends Fragment {
                             lyList.setVisibility(View.VISIBLE);
 
                             JSONArray array_data = jObj.getJSONArray("data");
-                            Log.e("List Beasiswa", "Data Api Response: " + array_data.toString());
 
                             ArrayList<Beasiswa> beasiswas = new ArrayList<>();
                             for(int i = 0; i < array_data.length(); i ++){
@@ -147,7 +146,6 @@ public class ListBeasiswaFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("List Beasiswa", "GET DATA Error: " + error.getMessage());
                 Toast.makeText(getActivity().getApplicationContext(),
                         "koneksi internet tidak stabil", Toast.LENGTH_LONG).show();
 

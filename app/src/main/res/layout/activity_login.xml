@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="150dp">
+        android:paddingTop="100dp">
 
         <ImageView
             android:id="@+id/imageView"
@@ -26,6 +26,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBanana"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabIndicatorColor="@color/colorSmokeGray" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
         android:gravity="center"
         android:paddingTop="100dp">
 
@@ -47,11 +85,6 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="20dp"/>
-
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/sign_in_fb_button"
-            android:layout_width="250dp"
-            android:layout_height="250dp" />
 
         <Space
             android:layout_width="match_parent"

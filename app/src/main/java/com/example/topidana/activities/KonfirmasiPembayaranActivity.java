@@ -119,7 +119,6 @@ public class KonfirmasiPembayaranActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Profile", "GET DATA Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         "koneksi internet tidak stabil", Toast.LENGTH_LONG).show();
             }
@@ -154,14 +153,12 @@ public class KonfirmasiPembayaranActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     // JSON error
-                    Log.e("Konfirmasi Pembayaran!", "error");
                     e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Konfirmasi Pembayaran", "Konfirmasi Pembayaran Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
             }

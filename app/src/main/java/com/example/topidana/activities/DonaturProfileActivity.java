@@ -189,7 +189,6 @@ public class DonaturProfileActivity extends AppCompatActivity {
                     }
                 }catch (JSONException e) {
                     // JSON error
-                    Log.e("Edit Profile!", "error");
                     e.printStackTrace();
                 }
             }
@@ -197,7 +196,6 @@ public class DonaturProfileActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Profile Activity", "Edit Profile Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
 
@@ -265,7 +263,6 @@ public class DonaturProfileActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Profile", "GET DATA Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         "koneksi internet tidak stabil", Toast.LENGTH_LONG).show();
 

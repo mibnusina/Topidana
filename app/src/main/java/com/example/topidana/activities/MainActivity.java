@@ -33,6 +33,7 @@ import com.example.topidana.app.Server;
 import com.example.topidana.fargments.ListBeasiswaDonaturFragment;
 import com.example.topidana.fargments.ListBeasiswaFragment;
 import com.example.topidana.fargments.MainFragment;
+import com.example.topidana.services.SharedPrefManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -42,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.example.topidana.activities.LoginActivity.mGoogleSignInClient;
+import static com.example.topidana.activities.LoginActivity.sharedPrefManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -152,7 +154,6 @@ public class MainActivity extends AppCompatActivity
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Profile", "GET DATA Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         "koneksi internet tidak stabil", Toast.LENGTH_LONG).show();
 
@@ -172,14 +173,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void signOut() {
-        mGoogleSignInClient.signOut()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Intent i = new Intent(MainActivity.this, WelcomePageActivity.class);
-                        startActivity(i);
-                    }
-                });
+//        mGoogleSignInClient.signOut()
+//                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        Intent i = new Intent(MainActivity.this, WelcomePageActivity.class);
+//                        startActivity(i);
+//                    }
+//                });
+        sharedPrefManager.saveSPBoolean(SharedPrefManager.SP_LOGIN, false);
+        startActivity(new Intent(MainActivity.this, WelcomePageActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+        finish();
     }
 
     public static void showDialog() {

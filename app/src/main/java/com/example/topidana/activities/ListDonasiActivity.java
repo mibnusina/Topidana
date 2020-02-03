@@ -87,7 +87,6 @@ public class ListDonasiActivity extends AppCompatActivity {
                             lyInfo.setVisibility(View.GONE);
 
                             JSONArray array_data = jObj.getJSONArray("data");
-                            Log.e("List Beasiswa", "Data Api Response: " + array_data.toString());
 
                             ArrayList<Donasi> donasis = new ArrayList<>();
                             for(int i = 0; i < array_data.length(); i ++){
@@ -121,7 +120,6 @@ public class ListDonasiActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("List Beasiswa", "GET DATA Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         "koneksi internet tidak stabil", Toast.LENGTH_LONG).show();
 
